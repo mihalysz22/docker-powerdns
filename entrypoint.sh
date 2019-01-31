@@ -9,39 +9,7 @@ set -e
 # treat everything except -- as exec cmd
 [ "${1:0:2}" != "--" ] && exec "$@"
 
-<<<<<<< HEAD
-if $MYSQL_AUTOCONF ; then
-  if [ -z "$MYSQL_PORT" ]; then
-      MYSQL_PORT=3306
-  fi
-  if [ -z "$MYSQL_DNSSEC" ]; then
-      MYSQL_DNSSEC='no'
-  fi
-  # Set MySQL Credentials in pdns.conf
-  sed -r -i "s/^[# ]*gmysql-host=.*/gmysql-host=${MYSQL_HOST}/g" /etc/pdns/pdns.conf
-  sed -r -i "s/^[# ]*gmysql-port=.*/gmysql-port=${MYSQL_PORT}/g" /etc/pdns/pdns.conf
-  sed -r -i "s/^[# ]*gmysql-user=.*/gmysql-user=${MYSQL_USER}/g" /etc/pdns/pdns.conf
-  sed -r -i "s/^[# ]*gmysql-password=.*/gmysql-password=${MYSQL_PASS}/g" /etc/pdns/pdns.conf
-  sed -r -i "s/^[# ]*gmysql-dbname=.*/gmysql-dbname=${MYSQL_DB}/g" /etc/pdns/pdns.conf
-  sed -r -i "s/^[# ]*gmysql-dnssec=.*/gmysql-dnssec=${MYSQL_DNSSEC}/g" /etc/pdns/pdns.conf
-
-  MYSQLCMD="mysql --host=${MYSQL_HOST} --user=${MYSQL_USER} --password=${MYSQL_PASS} --port=${MYSQL_PORT} -r -N"
-
-  # wait for Database come ready
-  isDBup () {
-    echo "SHOW STATUS" | $MYSQLCMD 1>/dev/null
-    echo $?
-  }
-
-  RETRY=10
-  until [ `isDBup` -eq 0 ] || [ $RETRY -le 0 ] ; do
-    echo "Waiting for database to come up"
-    sleep 5
-    RETRY=$(expr $RETRY - 1)
-  done
-  if [ $RETRY -le 0 ]; then
-=======
-# Set MySQL Credentials to be imported into pdns.conf
+# Set credentials to be imported into pdns.conf
 case "$AUTOCONF" in
   mysql)
     export PDNS_LOAD_MODULES=$PDNS_LOAD_MODULES,libgmysqlbackend.so
@@ -102,7 +70,6 @@ until [ `isDBup` -eq 0 ] || [ $RETRY -le 0 ] ; do
 done
 if [ $RETRY -le 0 ]; then
   if [[ "$MYSQL_HOST" ]]; then
->>>>>>> Add multi DB support
     >&2 echo Error: Could not connect to Database on $MYSQL_HOST:$MYSQL_PORT
     exit 1
   elif [[ "$PGSQL_HOST" ]]; then
@@ -119,6 +86,13 @@ case "$PDNS_LAUNCH" in
     if [ "$(echo "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = \"$MYSQL_DB\";" | $MYSQLCMD)" -le 1 ]; then
       echo Initializing Database
       cat /etc/pdns/mysql.schema.sql | $MYSQLCMD
+      # Run custom mysql post-init sql scripts
+      if [ -d "/etc/pdns/mysql-postinit" ]; then
+        for SQLFILE in $(ls -1 /etc/pdns/mysql-postinit/*.sql | sort) ; do
+          echo Source $SQLFILE
+          cat $SQLFILE | $MYSQLCMD
+        done
+      fi
     fi
   ;;
   gpgsql)
@@ -140,20 +114,6 @@ case "$PDNS_LAUNCH" in
   ;;
 esac
 
-<<<<<<< HEAD
-  if [ "$(echo "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = \"$MYSQL_DB\";" | $MYSQLCMD)" -le 1 ]; then
-    echo Initializing Database
-    cat /etc/pdns/schema.sql | $MYSQLCMD
-
-    # Run custom mysql post-init sql scripts
-    if [ -d "/etc/pdns/mysql-postinit" ]; then
-      for SQLFILE in $(ls -1 /etc/pdns/mysql-postinit/*.sql | sort) ; do
-        echo Source $SQLFILE
-        cat $SQLFILE | $MYSQLCMD
-      done
-    fi
-  fi
-=======
 # convert all environment variables prefixed with PDNS_ into pdns config directives
 PDNS_LOAD_MODULES="$(echo $PDNS_LOAD_MODULES | sed 's/^,//')"
 printenv | grep ^PDNS_ | cut -f2- -d_ | while read var; do
@@ -163,7 +123,6 @@ printenv | grep ^PDNS_ | cut -f2- -d_ | while read var; do
   [[ -z "$TRACE" ]] || echo "$var=$val"
   sed -r -i "s#^[# ]*$var=.*#$var=$val#g" /etc/pdns/pdns.conf
 done
->>>>>>> Add multi DB support
 
 # environment hygiene
 for var in $(printenv | cut -f1 -d= | grep -v -e HOME -e USER -e PATH ); do unset $var; done
