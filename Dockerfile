@@ -20,7 +20,7 @@ ENV REFRESHED_AT="2019-10-10" \
     PGSQL_DB="pdns" \
     SQLITE_DB="pdns.sqlite3"
 
-RUN apk --update --no-cache add mysql-client mariadb-client-libs libpq sqlite-libs libstdc++ libgcc postgresql-client sqlite \
+RUN apk --update --no-cache add mysql-client mariadb-client-libs libpq sqlite-libs libstdc++ libgcc postgresql-client sqlite bash \
   && apk add --no-cache --virtual .build-deps \
       g++ make mariadb-dev postgresql-dev sqlite-dev curl boost-dev mariadb-connector-c-dev file binutils bash \
   && curl -sSL https://downloads.powerdns.com/releases/pdns-$POWERDNS_VERSION.tar.bz2 | tar xj -C /tmp \
