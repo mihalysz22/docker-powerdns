@@ -13,11 +13,16 @@
 * Guardian process enabled
 * Graceful shutdown using pdns_control
 
-## Supported tags
+## Supported tags for source version
 
 * Exact: i.e. `4.1.10`: PowerDNS Version 4.1.10
 * `4.0`: PowerDNS Version 4.0.x, latest image build
 * `4`: PowerDNS Version 4.x.x, latest image build
+
+## Build
+
+To build the source version image run the following command  
+`docker build -t psitrax/powerdns -f alpine-3.9-pdns-4.1.5-source/Dockerfile .`
 
 ## Usage
 
@@ -116,4 +121,3 @@ See `docker run --rm psitrax/powerdns --help`
 ### Credits
 
 * Mathias Kaufmann <me@stei.gr>: Reduced image size
-
