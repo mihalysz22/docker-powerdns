@@ -22,7 +22,7 @@
 ## Build
 
 To build the source version image run the following command  
-`docker build -t psitrax/powerdns -f alpine-3.9-pdns-4.1.5-source/Dockerfile .`
+`docker build -t psitrax/powerdns .`
 
 ## Usage
 
