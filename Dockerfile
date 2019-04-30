@@ -18,7 +18,7 @@ ENV REFRESHED_AT="2019-02-18" \
     PGSQL_DB="pdns" \
     SQLITE_DB="pdns.sqlite3"
 
-RUN apk --update --no-cache add pdns pdns-backend-sqlite3 pdns-backend-bind pdns-backend-mysql pdns-backend-pgsql pdns-backend-random bash
+RUN apk --update --no-cache add pdns pdns-backend-sqlite3 pdns-backend-bind pdns-backend-mysql pdns-backend-pgsql bash
 RUN mkdir -p /etc/pdns/conf.d
 
 EXPOSE 53/tcp 53/udp
