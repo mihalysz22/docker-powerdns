@@ -13,7 +13,7 @@
 * Guardian process enabled
 * Graceful shutdown using pdns_control
 
-## Supported tags for source version
+## Supported tags
 
 * Exact: i.e. `4.1.10`: PowerDNS Version 4.1.10
 * `4.0`: PowerDNS Version 4.0.x, latest image build
@@ -21,7 +21,7 @@
 
 ## Build
 
-To build the source version image run the following command  
+To build the image run the following command  
 `docker build -t psitrax/powerdns .`
 
 ## Usage
