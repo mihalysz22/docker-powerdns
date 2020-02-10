@@ -2,7 +2,7 @@ FROM alpine:3.9
 
 LABEL \
   MAINTAINER="Christoph Wiechert <wio@psitrax.de>" \
-  CONTRIBUTORS="Mathias Kaufmann <me@stei.gr>, Cloudesire <dev@cloudesire.com>"
+  CONTRIBUTORS="Mathias Kaufmann <me@stei.gr>, Cloudesire <cloduesire-dev@eng.it>"
 
 ENV REFRESHED_AT="2019-02-18" \
     AUTOCONF=mysql \
