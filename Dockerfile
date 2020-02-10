@@ -11,6 +11,7 @@ ENV REFRESHED_AT="2019-02-18" \
     MYSQL_USER="root" \
     MYSQL_PASS="root" \
     MYSQL_DB="pdns" \
+    MYSQL_DNSSEC="no" \
     PGSQL_HOST="postgres" \
     PGSQL_PORT="5432" \
     PGSQL_USER="postgres" \
