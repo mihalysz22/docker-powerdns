@@ -46,7 +46,7 @@ case "$AUTOCONF" in
 esac
 
 MYSQLCMD="mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASS -r -N"
-PGSQLCMD="psql --host=$PGSQL_HOST --username=$PGSQL_USER"
+PGSQLCMD="psql postgres://${PGSQL_USER}:${PGSQL_PASS}@${PGSQL_HOST}:${PGSQL_PORT}/${PGSQL_DB}?sslmode=allow"
 
 # wait for Database come ready
 isDBup () {
